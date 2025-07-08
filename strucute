@@ -1,0 +1,15 @@
+BACKEND/
+├── Controller/               ✅ Main logic goes here (like QR generation)
+│   └── QRcodeController.js
+│
+├── uploads/                  ✅ Stores uploaded files via Multer
+│   └── (PDF/DOCX or other files)
+│
+├── utils/                    ✅ Helper files
+│   └── qrscanner.js          ✅ (For reading/scanning QR if needed)
+│
+├── Routes/                   ✅ API route definitions
+│   └── (e.g., QR or upload routes)
+│
+├── app.js                    ✅ Express app entry point
+├── package.json              ✅ Dependencies
