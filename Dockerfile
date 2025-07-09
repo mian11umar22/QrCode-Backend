@@ -12,8 +12,8 @@ WORKDIR /app
 COPY . .
 RUN npm install
 
-# Expose your backend port
+# Expose your backend port (important for Railway)
 EXPOSE 5000
 
-# Start your server (adjust if your entry point is different)
-CMD ["node", "app.js"]
+# Start your server via package.json script
+CMD ["npm", "start"]
