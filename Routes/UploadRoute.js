@@ -6,6 +6,6 @@ const {
   uploadAndScanQr,
   addQRToFile,
 } = require("../Controller/QRcodeController");
-router.post("/upload", upload.single("file"), uploadAndScanQr);
+router.post("/upload", upload.any(), uploadAndScanQr);
 router.post("/addqr", addQRToFile);
 module.exports = router;

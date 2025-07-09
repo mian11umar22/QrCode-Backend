@@ -28,32 +28,42 @@ const uploadAndScanQr = async (req, res) => {
 const getQrCodeCollection = require("../models/qrModel");
 
 const addQRToFile = async (req, res) => {
-  const { filename, employeeId } = req.body;
-  if (!filename || !employeeId) {
-    return res
-      .status(400)
-      .json({ error: "Filename and employeeId are required" });
-  }
+  const employeeId = req.body.employeeId;
 
   try {
+    let files = [];
+
+    if (req.file) files = [req.file];
+    else if (req.files) files = req.files;
+
+    if (!files.length || !employeeId) {
+      return res
+        .status(400)
+        .json({ error: "Files and employeeId are required" });
+    }
+
     const frontendBaseUrl = process.env.FRONTEND_BASE_URL;
     const verifyUrl = `${frontendBaseUrl}/verify/${employeeId}`;
-    const finalFilename = await generateAndAddQR(filename, verifyUrl);
-
-    // ✅ Save to qrcodes collection
     const qrCollection = await getQrCodeCollection();
-    await qrCollection.insertOne({
-      employeeId,
-      documentName: finalFilename,
-      verifyUrl,
-      createdAt: new Date(),
-    });
+
+    const processedFiles = [];
+
+    for (const file of files) {
+      const finalFilename = await generateAndAddQR(file.filename, verifyUrl);
+
+      await qrCollection.insertOne({
+        employeeId,
+        documentName: finalFilename,
+        verifyUrl,
+        createdAt: new Date(),
+      });
+
+      processedFiles.push(finalFilename);
+    }
 
     return res.status(200).json({
-      message: "✅ QR added and saved",
-      file: finalFilename,
-      fileUrl: `/uploads/${finalFilename}`,
-      verifyUrl,
+      message: "✅ QR(s) added and saved",
+      files: processedFiles,
     });
   } catch (err) {
     console.error("❌ QR add failed", err);

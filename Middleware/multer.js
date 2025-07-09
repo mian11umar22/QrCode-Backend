@@ -6,13 +6,14 @@ const storage = multer.diskStorage({
     cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
-   
-    const uniqueName = file.originalname;
+    const timestamp = Date.now();
+    const ext = path.extname(file.originalname);
+    const name = path.basename(file.originalname, ext);
+    const uniqueName = `${timestamp}-${name}${ext}`;
     cb(null, uniqueName);
   },
 });
 
-// File Type Filter (PDF, DOCX, JPG, PNG)
 const fileFilter = (req, file, cb) => {
   const allowedTypes = [
     "application/pdf",
@@ -29,12 +30,11 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// ✅ Multer Upload Middleware
 const upload = multer({
-  storage: storage,
-  fileFilter: fileFilter,
+  storage,
+  fileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5 MB size limit
+    fileSize: 5 * 1024 * 1024, // 5 MB
   },
 });
 
