@@ -27,17 +27,29 @@
   };
 
   // ✅ Convert DOCX to PDF using LibreOffice
+  const path = require("path");
+  const { exec } = require("child_process");
+
   const convertDOCXToPDF = (docxPath) => {
     return new Promise((resolve, reject) => {
       const dir = path.dirname(docxPath);
-      const cmd = `"C:\\Program Files\\LibreOffice\\program\\soffice.exe" --headless --convert-to pdf "${docxPath}" --outdir "${dir}"`;
+      const cmd = `soffice --headless --convert-to pdf "${docxPath}" --outdir "${dir}"`;
+
       exec(cmd, (err) => {
-        if (err) return reject(err);
-        const pdfPath = path.join(dir, path.basename(docxPath, ".docx") + ".pdf");
+        if (err) {
+          console.error("❌ DOCX to PDF conversion failed:", err);
+          return reject(err);
+        }
+
+        const pdfPath = path.join(
+          dir,
+          path.basename(docxPath, ".docx") + ".pdf"
+        );
         resolve(pdfPath);
       });
     });
   };
+  
 
   // ✅ Composite QR onto image
   const addQRToImage = async (imagePath, qrPath, outputName) => {

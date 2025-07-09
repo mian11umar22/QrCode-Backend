@@ -40,8 +40,14 @@ const convertPDFToImage = (pdfPath) => {
 const convertDOCXToPDF = (docxPath) => {
   return new Promise((resolve, reject) => {
     const dir = path.dirname(docxPath);
-    const sofficePath = `"C:\\Program Files\\LibreOffice\\program\\soffice.exe"`; // Full path to LibreOffice
-    const cmd = `${sofficePath} --headless --convert-to pdf "${docxPath}" --outdir "${dir}"`;
+    const isWindows = process.platform === "win32";
+
+    // Use correct LibreOffice path
+    const sofficeCmd = isWindows
+      ? `"C:\\Program Files\\LibreOffice\\program\\soffice.exe"`
+      : "soffice"; // on Linux (Docker/Railway)
+
+    const cmd = `${sofficeCmd} --headless --convert-to pdf "${docxPath}" --outdir "${dir}"`;
 
     exec(cmd, (error) => {
       if (error) {
@@ -55,6 +61,7 @@ const convertDOCXToPDF = (docxPath) => {
     });
   });
 };
+
 
 const checkQR = async (filePath) => {
   const ext = path.extname(filePath).toLowerCase();
