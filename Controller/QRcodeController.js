@@ -28,9 +28,12 @@ const uploadAndScanQr = async (req, res) => {
 const getQrCodeCollection = require("../models/qrModel");
 
 const addQRToFile = async (req, res) => {
-  const employeeId = req.body.employeeId;
+  let employeeId;
 
   try {
+    const parsed = JSON.parse(req.body.employee || "{}");
+    employeeId = parsed.employeeId;
+
     let files = [];
 
     if (req.file) files = [req.file];
@@ -39,7 +42,7 @@ const addQRToFile = async (req, res) => {
     if (!files.length || !employeeId) {
       return res
         .status(400)
-        .json({ error: "Files and employeeId are required" });
+        .json({ error: "Files and valid employeeId are required" });
     }
 
     const frontendBaseUrl = process.env.FRONTEND_BASE_URL;
@@ -70,5 +73,6 @@ const addQRToFile = async (req, res) => {
     return res.status(500).json({ error: "Something went wrong" });
   }
 };
+
 
 module.exports = { uploadAndScanQr, addQRToFile };
