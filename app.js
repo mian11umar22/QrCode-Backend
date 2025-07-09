@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const path = require("path");
-const port = 3000;
+const port = process.env.PORT || 3000;
 app.use(cors());
 const uploadRoute = require("./Routes/UploadRoute");
 const formRoute = require("./Routes/EmployeeRoute");
