@@ -36,7 +36,8 @@ const addQRToFile = async (req, res) => {
   }
 
   try {
-    const verifyUrl = `http://localhost:5173/verify/${employeeId}`;
+    const frontendBaseUrl = process.env.FRONTEND_BASE_URL;
+    const verifyUrl = `${frontendBaseUrl}/verify/${employeeId}`;
     const finalFilename = await generateAndAddQR(filename, verifyUrl);
 
     // ✅ Save to qrcodes collection
