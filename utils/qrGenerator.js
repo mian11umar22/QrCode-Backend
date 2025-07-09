@@ -27,8 +27,7 @@
   };
 
   // ✅ Convert DOCX to PDF using LibreOffice
-  const path = require("path");
-  const { exec } = require("child_process");
+  
 
   const convertDOCXToPDF = (docxPath) => {
     return new Promise((resolve, reject) => {
