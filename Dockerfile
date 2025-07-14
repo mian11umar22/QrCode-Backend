@@ -1,9 +1,16 @@
 FROM node:18
 
-# Install system dependencies (LibreOffice + pdftocairo)
+# Install system dependencies for canvas + LibreOffice + pdftocairo
 RUN apt-get update && apt-get install -y \
+  libcairo2-dev \
+  libjpeg-dev \
+  libpango1.0-dev \
+  libgif-dev \
+  librsvg2-dev \
   libreoffice \
-  poppler-utils
+  poppler-utils \
+  build-essential \
+  g++
 
 # Create app directory
 WORKDIR /app
@@ -12,8 +19,8 @@ WORKDIR /app
 COPY . .
 RUN npm install
 
-# Expose your backend port (important for Railway)
+# Expose backend port
 EXPOSE 5000
 
-# Start your server via package.json script
+# Start the server
 CMD ["npm", "start"]
