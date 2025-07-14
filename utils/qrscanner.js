@@ -3,7 +3,7 @@ const path = require("path");
 const Jimp = require("jimp");
 const QrCode = require("qrcode-reader");
 const jsQR = require("jsqr");
-const { createCanvas, loadImage } = require("canvas");
+const { createCanvas, loadImage } = require("@napi-rs/canvas");
 const { exec } = require("child_process");
 
 // ----- Utility to log and cleanup -----
